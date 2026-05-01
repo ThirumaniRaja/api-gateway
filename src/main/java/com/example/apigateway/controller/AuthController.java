@@ -2,6 +2,7 @@ package com.example.apigateway.controller;
 
 import com.example.apigateway.dto.LoginRequest;
 import com.example.apigateway.dto.LoginResponse;
+import com.example.apigateway.dto.RegisterRequest;
 import com.example.apigateway.security.AuthService;
 import com.example.apigateway.security.JwtService;
 import jakarta.validation.Valid;
@@ -29,6 +30,12 @@ public class AuthController {
         return authService.authenticate(request.getUsername(), request.getPassword())
                 .<ResponseEntity<?>>map(user -> ResponseEntity.ok(new LoginResponse(jwtService.issueToken(user))))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials"));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        authService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }
 }
 
