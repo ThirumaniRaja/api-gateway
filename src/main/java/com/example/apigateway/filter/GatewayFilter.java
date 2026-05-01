@@ -40,7 +40,7 @@ public class GatewayFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         return path.startsWith("/auth/") || path.startsWith("/internal/") || path.startsWith("/error")
-                || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui") || path.equals("/swagger-ui.html")
+                || path.startsWith("/v3/api-docs") || path.startsWith("v3/swagger-ui") || path.startsWith("/swagger-ui") || path.equals("/swagger-ui.html")
                 || path.startsWith("/actuator");
     }
 
