@@ -1,10 +1,10 @@
-# Mini API Gateway (Spring Boot + MongoDB)
+# Mini API Gateway (Spring Boot + PostgreSQL)
 
 This project implements a mini API Gateway with:
 - JWT authentication
 - Token Bucket rate limiting (per user + IP)
 - Request routing to dummy internal services
-- Request/violation logging to MongoDB
+- Request/violation logging to PostgreSQL
 - Simple monitoring endpoint
 
 ## Architecture
@@ -18,8 +18,7 @@ This project implements a mini API Gateway with:
   - Routes to internal service handlers
 - `DummyInternalService`
   - Simulated backend/internal service responses
-- `ApiLogService`
-  - Persists request logs and minute-level counters in MongoDB
+
 
 ## Endpoints
 
@@ -44,10 +43,10 @@ This project implements a mini API Gateway with:
 - `gateway.rate-limit.burst-capacity` (default: `100`)
 - `gateway.auth.jwt-secret`
 - `gateway.auth.jwt-expiration-seconds`
-- `spring.data.mongodb.uri`
+
 
 You can override with environment variables:
-- `MONGO_URI`
+
 - `JWT_SECRET`
 - `JWT_EXPIRATION_SECONDS`
 - `RATE_LIMIT_PER_MINUTE`
@@ -55,8 +54,7 @@ You can override with environment variables:
 
 ## Run
 
-1. Start MongoDB locally (or provide `MONGO_URI`).
-2. Build and run:
+1. Build and run:
 
 ```bash
 mvn spring-boot:run
@@ -85,7 +83,7 @@ curl -s http://localhost:8080/monitor/logs?limit=5 -H "Authorization: Bearer $TO
 
 ### High Traffic Behavior
 - In-memory token checks are O(1) and lock only per user bucket.
-- Mongo logging write amplification can become a bottleneck; use async queue/batch writes in production.
+- PostgreSQL logging write amplification can become a bottleneck; use async queue/batch writes in production.
 
 ### Data Consistency vs Performance
 - Request allow/deny path prioritizes speed and availability.
@@ -94,7 +92,7 @@ curl -s http://localhost:8080/monitor/logs?limit=5 -H "Authorization: Bearer $TO
 ### Distributed System Considerations
 - Shared state store (Redis) for rate limiting.
 - Stateless JWT auth works across replicas.
-- Centralized log pipeline (Kafka -> Mongo/Elastic) for high-volume observability.
+- Centralized log pipeline (Kafka -> PostgreSQL/Elastic) for high-volume observability.
 
 ## Tests
 
