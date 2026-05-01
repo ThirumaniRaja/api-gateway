@@ -1,13 +1,12 @@
 package com.example.apigateway.repository;
 
 import com.example.apigateway.model.ApiRequestLog;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface ApiRequestLogRepository extends MongoRepository<ApiRequestLog, String> {
+public interface ApiRequestLogRepository extends JpaRepository<ApiRequestLog, Long> {
 
     List<ApiRequestLog> findAllByOrderByTimestampDesc(Pageable pageable);
 }
-

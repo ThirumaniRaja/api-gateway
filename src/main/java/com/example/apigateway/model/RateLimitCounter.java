@@ -1,31 +1,38 @@
 package com.example.apigateway.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import jakarta.persistence.*;
 import java.time.Instant;
 
-@Document(collection = "rate_limit_counters")
-@CompoundIndex(name = "user_window_idx", def = "{'key':1,'windowStartEpochMinute':1}", unique = true)
+@Entity
+@Table(
+        name = "rate_limit_counters",
+        indexes = {
+                @Index(name = "user_window_idx", columnList = "key, window_start_epoch_minute", unique = true)
+        }
+)
 public class RateLimitCounter {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(name = "key", nullable = false)
     private String key;
 
+    @Column(name = "window_start_epoch_minute", nullable = false)
     private long windowStartEpochMinute;
 
+    @Column(name = "request_count")
     private long requestCount;
 
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,4 +68,3 @@ public class RateLimitCounter {
         this.updatedAt = updatedAt;
     }
 }
-

@@ -1,12 +1,11 @@
 package com.example.apigateway.repository;
 
 import com.example.apigateway.model.RateLimitCounter;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface RateLimitCounterRepository extends MongoRepository<RateLimitCounter, String> {
+public interface RateLimitCounterRepository extends JpaRepository<RateLimitCounter, Long> {
 
     Optional<RateLimitCounter> findByKeyAndWindowStartEpochMinute(String key, long windowStartEpochMinute);
 }
-

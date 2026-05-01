@@ -1,41 +1,45 @@
 package com.example.apigateway.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import jakarta.persistence.*;
 import java.time.Instant;
 
-@Document(collection = "api_request_logs")
+@Entity
+@Table(name = "api_request_logs")
 public class ApiRequestLog {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Indexed
+    @Column(name = "timestamp")
     private Instant timestamp;
 
-    @Indexed
+    @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "ip_address")
     private String ipAddress;
 
-    @Indexed
+    @Column(name = "endpoint")
     private String endpoint;
 
+    @Column(name = "method")
     private String method;
 
+    @Column(name = "status_code")
     private int statusCode;
 
+    @Column(name = "rate_limit_violation")
     private boolean rateLimitViolation;
 
+    @Column(name = "duration_ms")
     private long durationMs;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -103,4 +107,3 @@ public class ApiRequestLog {
         this.durationMs = durationMs;
     }
 }
-
